@@ -111,6 +111,9 @@ Link to the app -> [Click Here!](https://adam-inventory.adaptable.app/main/)
 ### 5. Diagram Flow.
 <img src="./assets/flowPbP.png">
 
+First, user make a request to Django-Based website, and then it will trigger `urls.py` to find wich route that user want to access for example, if user make a request with a route(url) `localhost:8000/main` then after that it will trigger the `views.py` to find wich method that routes associated and then render the html file and `views.py` could be communicate with `models.py` if the html file needs any data to be rendered. After `models.py` communicate with Database then the models return the data to view and display it to html file that was requested.
+
+
 ### 6. Purpose of a virtual environment, can we create a Django web app without a virtual environment?
 A virtual environment in the context of Python is a self-contained directory that contains its own Python interpreter and a set of libraries. Its primary purpose is to isolate Python projects and their dependencies, ensuring that each project has its own clean and independent environment. Regarding Django web apps: While it is technically possible to create a Django web app without a virtual environment, it is highly discouraged for the reasons mentioned above. Django projects often rely on specific versions of Django and other Python packages, and using a virtual environment ensures that you can manage these dependencies without interfering with other Python projects on your system.
 
