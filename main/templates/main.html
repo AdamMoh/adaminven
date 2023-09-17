@@ -1,7 +1,49 @@
-<h1>{{ appname }}</h1>
+{% extends 'base.html' %}
 
-<h5>Name:</h5>
-<p>{{ name }}</p>
+{% block content %}
+<div class="container" style="text-align: center;">
+    <h1>Adam Inventory</h1>
 
-<h5>Class:</h5>
-<p>{{ class }}</p>
+    <h5>Name:</h5>
+    <p>{{name}}</p>
+
+    <h5>Class:</h5>
+    <p>{{class}}</p>
+</div>
+
+<table id="myTable" class="display">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Date Added</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% comment %} Below is how to show the product data {% endcomment %}
+        {% for data in datas %}
+        <tr>
+            <td>{{data.name}}</td>
+            <td>{{data.amount}}</td>
+            <td>{{data.price}}</td>
+            <td>{{data.category}}</td>
+            <td>{{data.description}}</td>
+            <td>{{data.date_added}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br />
+
+<a href="{% url 'main:create_product' %}">
+    <button type="button" class="btn btn-primary">
+        Add New Product
+    </button>
+</a>
+
+{% endblock content %}
