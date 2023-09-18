@@ -10,12 +10,14 @@ from django.urls import reverse
 def show_main(request):
 
     dataAll = Item.objects.all()
+    dataCount = dataAll.count()
     
     context = {
         'appname': 'Adam Inventory',
         'name': 'Adam Muhammad',
         'class': 'KKI',
         'datas': dataAll,
+        'dataCounts' : dataCount,
     }
 
     return render(request, 'main.html', context)
