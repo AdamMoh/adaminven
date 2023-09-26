@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container" style="text-align: center;">
-    <h1>Adam Inventory</h1>
+    <h1>{{appname}}</h1>
 
     <h5>Name:</h5>
     <p>{{name}}</p>
@@ -20,7 +20,7 @@
             <th>Category</th>
             <th>Description</th>
             <th>Date Added</th>
-
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -33,16 +33,46 @@
             <td>{{data.category}}</td>
             <td>{{data.description}}</td>
             <td>{{data.date_added}}</td>
+            <td>
+                <a href="/delete/{{data.id}}">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">
+                        Delete
+                    </button>
+                </a>
+                /
+                <a href="/increment/{{data.id}}">
+                    <button type="button" class="btn btn-primary btn-sm">
+                        Increment
+                    </button>
+                </a>
+                /
+                <a href="/decrement/{{data.id}}">
+                    <button type="button" class="btn btn-warning btn-sm" onclick="return confirm('If the amount less than 1, the data will be deleted!');">
+                        Decrement
+                    </button>
+                </a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<p>Last login session: {{ last_login }}</p>
+
+<br />
 
 <br />
 <p>You have saved {{ dataCounts }} items in this application</p>
 <a href="{% url 'main:create_product' %}">
     <button type="button" class="btn btn-primary">
         Add New Product
+    </button>
+</a>
+
+
+<a href="{% url 'main:logout' %}">
+    <button type="button" class="btn btn-danger">
+        Logout
     </button>
 </a>
 
