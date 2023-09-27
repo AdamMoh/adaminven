@@ -35,17 +35,17 @@
             <td>{{data.date_added}}</td>
             <td>
                 <a href="/delete/{{data.id}}">
-                    <button type="button" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">
+                    <button type="button" class="btn btn-danger btn-sm btn-space" onclick="return confirm('Are you sure you want to delete this item?');">
                         Delete
                     </button>
                 </a>
-                /
+                
                 <a href="/increment/{{data.id}}">
-                    <button type="button" class="btn btn-primary btn-sm">
+                    <button type="button" class="btn btn-primary btn-sm btn-space">
                         Increment
                     </button>
                 </a>
-                /
+                
                 <a href="/decrement/{{data.id}}">
                     <button type="button" class="btn btn-warning btn-sm" onclick="return confirm('If the amount less than 1, the data will be deleted!');">
                         Decrement

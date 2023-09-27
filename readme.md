@@ -288,3 +288,263 @@ urlpatterns = [
 ### 4. XML by Id
 <img src="./assets/product_xml_id.png">
 </details>
+
+### Assignment 4
+<details>
+<summary>1. What is UserCreationForm in Django</summary>
+
+ is a powerful tool for quickly creating user registration forms in Django applications, especially for basic use cases. It simplifies many aspects of user account creation and integrates well with Django's authentication system. However, for more complex or highly customized registration processes, but it still need to extend or create custom forms to meet your application's specific needs.
+
+**Advantages**
+- Simplicity: `UserCreationForm` makes it easy to create user registration forms with just a few lines of code. It abstracts away much of the boilerplate code required for form validation and user creation.
+
+- Security: It automatically handles password hashing and password confirmation validation, ensuring that passwords are stored securely in the database. This helps protect user data.
+
+- Integration with Django Authentication: It seamlessly integrates with Django's built-in authentication system, making it easy to create user accounts and manage user authentication within your Django project.
+
+**Disadvantages**
+- Limited Fields: UserCreationForm includes only a basic set of fields (username and password) by default. If needed to capture additional user information during registration, it need to customize the form or create a separate form for that purpose.
+
+- Flexibility: While it's suitable for many basic registration scenarios, it may not cover all the requirements of complex user registration processes. In such cases,it may need to create a custom registration form from scratch.
+
+</details>
+
+<details>
+<summary>2. What is the difference between authentication and authorization in Django application? Why are both important?</summary>
+
+ Authentication and authorization are two distinct but closely related concepts in web applications, including Django applications. They play crucial roles in ensuring the security and privacy of user data and controlling access to different parts of the application.
+
+**Authentication**
+
+Authentication is the process of verifying the identity of a user, typically by confirming that the user is who they claim to be. In a Django application, authentication is primarily concerned with user login and user account management. Here's how it works in Django:
+
+- User Login: When a user enters their username and password, Django checks whether the provided credentials match those stored in the database. If they match, the user is considered authenticated and gains access to their account.
+
+- User Registration: During registration, a new user is created, and their credentials (usually a username and a hashed password) are stored securely in the database.
+
+- Session Management: Django tracks authenticated users using sessions. Once a user logs in, their session is established, allowing them to navigate the application without having to re-enter their credentials on each request.
+
+**Authorization**
+
+Authorization, on the other hand, determines what actions an authenticated user is allowed to perform within the application. It enforces access control policies and specifies what resources or functionalities a user can access or manipulate. In Django, authorization is usually handled using permissions and access control:
+
+- Permissions: Django provides a robust permission system where you can assign permissions to specific user roles or groups. These permissions define what actions a user can perform, such as reading, creating, updating, or deleting certain data.
+
+
+</details>
+
+<details>
+<summary>3. What are cookies in website? How does Django use cookies to manage user session data?</summary>
+
+ Cookies are small pieces of data that a web server sends to a user's web browser and are stored on the user's device. They are commonly used in web development to store information about the user's interactions with a website. Cookies are often used for session management, tracking user preferences, and maintaining stateful information between HTTP requests.
+
+ In the context of website development, here are some key points about cookies:
+
+- Storage: Cookies are stored on the user's device, typically in the form of text files. Each cookie consists of a name-value pair and optional attributes like expiration date and path.
+
+- Security: While cookies are generally safe for storing non-sensitive data, they should not be used to store sensitive information like passwords. Developers should also be aware of security considerations, such as the risk of cookie theft or misuse.
+
+Django, being a powerful web framework, provides built-in support for managing user session data using cookies. Here's how Django uses cookies for session management:
+
+- Session Framework: Django includes a session framework that allows you to store and retrieve session data for users. By default, it uses cookies to store a session ID on the user's device.
+
+- Session Middleware: Django's session framework is enabled using middleware. The SessionMiddleware is responsible for handling sessions. It processes incoming requests, looks for a session ID cookie, and loads the session data associated with that ID from the server-side storage (usually a database).
+
+
+</details>
+
+<details>
+<summary>4. Are cookies secure to use? Is there potential risk to be aware of?</summary>
+
+Cookies are a common and essential part of web development, but they do come with security considerations and potential risks. It's important for web developers to be aware of these risks and take appropriate measures to mitigate them. Here are some security considerations and potential risks associated with the use of cookies:
+
+#### 1. Data Security:
+- Sensitive Information: Cookies should not be used to store sensitive information like passwords or personally identifiable information (PII). Storing such data in cookies can expose it to potential attackers.
+
+#### 2. Session Management:
+- Session Hijacking: If a session identifier stored in a cookie is compromised, an attacker could potentially hijack a user's session, gaining unauthorized access to their account and data.
+
+- Session Fixation: An attacker might set a user's session ID to a known value (session fixation attack) to gain access to the user's session.
+
+#### 3. Privacy Concerns:
+- Tracking: Cookies can be used for tracking user behavior across websites. While this is often used for legitimate purposes (e.g., analytics), it can also raise privacy concerns.
+
+
+</details>
+
+<details>
+<summary>5. Explain how you implemented the checklist above step-by-step</summary>
+
+### 1. Create a  views, form(if needed), and url for registration, login, and logout
+
+1. First we have to connect the Item table to User table, so we have to modify the `models.py`
+```
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    amount = models.IntegerField()
+    price = models.DecimalField(max_digits=19, decimal_places=2)
+    category = models.CharField(max_length=255)
+    description = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+```
+i add the user column that connected to `User` table as a ForeignKey.
+2. views.py, for the registration form we have to import `UserCreationForm`
+```
+def register(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+```
+if there is a request for this method, then create a simple form and then check the request method. After that, after the user has successfully registered then the user will be redirected to the login page.
+
+3. views.py, for the login form
+```
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            response = HttpResponseRedirect(reverse("main:show_main")) 
+            response.set_cookie('last_login', str(datetime.datetime.now()))
+            return response
+        else:
+            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {}
+    return render(request, 'login.html', context)
+```
+this method is to validate the username and password user input, if the user passed the authentication then the user will be redirected to main page, before that the program will store the last login to the cookies and will be displayed to the main page.
+
+4. views.py, for logout process
+```
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
+```
+this method used to process when the user is clicked on the logout button, and redirect to login page after that the cookies will be removed.
+
+5. login page, these are simple login page
+```
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+
+<div class = "login">
+
+    <h1>Login</h1>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>Username: </td>
+                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+            </tr>
+                    
+            <tr>
+                <td>Password: </td>
+                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td><input class="btn login_btn" type="submit" value="Login"></td>
+            </tr>
+        </table>
+    </form>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}     
+        
+    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+
+</div>
+
+{% endblock content %}
+```
+this form that will be rendered to user to do the login session.
+
+6. for the bonus, i created some methods:
+```
+def delete_item(request, id):
+    try:
+        data = Item.objects.get(id=id)
+        data.delete()
+        return HttpResponseRedirect(reverse('main:show_main'))
+    except Item.DoesNotExist:
+        return HttpResponse(status=204)
+    
+def increment_item(request, id):
+    data = Item.objects.get(id=id)
+    data.amount += 1
+    data.save()
+
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def decrement_item(request, id):
+    data = Item.objects.get(id=id)
+    data.amount -= 1
+
+    if data.amount == 0:
+        data.delete()
+        return HttpResponseRedirect(reverse('main:show_main'))
+    else:
+        data.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+```
+for the delete method, it's for delete a data that already exists in the database. Increment method it's to handle when user want to add more amount for the data. Last, for the decrement method, it's to handle when user want to decrement the amount of the data.
+
+7. Create a route for all the methods that have been created.
+
+```
+    path('register/', register, name='register'),
+    path('login/', login_user, name='login'),
+    path('logout/', logout_user, name='logout'),
+    path('delete/<int:id>', delete_item, name='delete_item'),
+    path('increment/<int:id>', increment_item, name='increment_item'),
+    path('decrement/<int:id>', decrement_item, name='decrement_item'),
+```
+8. last, i display the last login on the main page
+```
+<p>Last login session: {{ last_login }}</p>
+```
+the `last_login` variable is from the show_main method that have been modified as follows:
+```
+@login_required(login_url='/login')
+def show_main(request):
+
+    dataAll = Item.objects.filter(user=request.user)
+    dataCount = dataAll.count()
+    
+    context = {
+        'appname': 'Adam Inventory',
+        'name': 'Adam Muhammad',
+        'class': 'KKI',
+        'datas': dataAll,
+        'dataCounts' : dataCount,
+        'last_login': request.COOKIES['last_login'],
+    }
+
+    return render(request, 'main.html', context)
+```
+to make the main page required login, i put the annotation before the methods to tell this method can be called after the login session has been created.
+</details>
