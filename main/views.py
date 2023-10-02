@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from main.models import Item
-from main.forms import ItemForm
+from main.forms import ItemForm, LoginForm, SignUpForm
 from django.http import HttpResponse
 from django.core import serializers
 from django.urls import reverse
@@ -27,11 +27,12 @@ def show_main(request):
         'class': 'KKI',
         'datas': dataAll,
         'dataCounts' : dataCount,
-        'last_login': request.COOKIES['last_login'],
+        'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),
     }
 
     return render(request, 'main.html', context)
 
+@login_required(login_url='/login')
 def create_product(request):
     form = ItemForm(request.POST or None)
 
@@ -41,21 +42,28 @@ def create_product(request):
         product.save()
         return HttpResponseRedirect(reverse('main:show_main'))
 
-    context = {'form': form}
+    context = {
+        'form': form,
+         'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),
+         }
     return render(request, "create_product.html", context)
 
+@login_required(login_url='/login')
 def show_xml(request):
     data = Item.objects.all()
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+@login_required(login_url='/login')
 def show_json(request):
     data = Item.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@login_required(login_url='/login')
 def show_xml_by_id(request, id):
     data = Item.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
+@login_required(login_url='/login')
 def show_json_by_id(request, id):
     data = Item.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
@@ -63,29 +71,44 @@ def show_json_by_id(request, id):
 
 def register(request):
     form = UserCreationForm()
+    msg = None
+    # success = False
 
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your account has been successfully created!')
-            return redirect('main:login')
-    context = {'form':form}
-    return render(request, 'register.html', context)
+            username = form.cleaned_data.get("username")
+            raw_password = form.cleaned_data.get("password1")
+            user = authenticate(username=username, password=raw_password)
+
+            msg = 'User created - please <a href="/login">login</a>.'
+            success = True
+
+        else:
+            msg = 'Form is not valid'
+    else:
+        form = SignUpForm()
+    context = {"form": form, "msg": msg}
+    return render(request, "register.html", context)
 
 def login_user(request):
+
+    form = LoginForm(request.POST or None)
+
+    msg = None
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            response = HttpResponseRedirect(reverse("main:show_main")) 
+            response = HttpResponseRedirect(reverse("main:show_main"))
             response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
         else:
-            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
-    context = {}
+            msg = messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {"form": form, "message": msg}
     return render(request, 'login.html', context)
 
 def logout_user(request):
@@ -94,6 +117,7 @@ def logout_user(request):
     response.delete_cookie('last_login')
     return response
 
+@login_required(login_url='/login')
 def delete_item(request, id):
     try:
         data = Item.objects.get(id=id)
@@ -101,7 +125,8 @@ def delete_item(request, id):
         return HttpResponseRedirect(reverse('main:show_main'))
     except Item.DoesNotExist:
         return HttpResponse(status=204)
-    
+
+@login_required(login_url='/login')
 def increment_item(request, id):
     data = Item.objects.get(id=id)
     data.amount += 1
@@ -109,6 +134,7 @@ def increment_item(request, id):
 
     return HttpResponseRedirect(reverse('main:show_main'))
 
+@login_required(login_url='/login')
 def decrement_item(request, id):
     data = Item.objects.get(id=id)
     data.amount -= 1
@@ -119,4 +145,16 @@ def decrement_item(request, id):
     else:
         data.save()
         return HttpResponseRedirect(reverse('main:show_main'))
+
+@login_required(login_url='/login')
+def edit_item(request, id):
+    data = Item.objects.get(pk=id)
+    form = ItemForm(request.POST or None, instance=data)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+    
+    context = {'form': form}
+    return render(request, "edit.html", context)
     

@@ -1,79 +1,123 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %} Datatables {% endblock title %}
+
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-<div class="container" style="text-align: center;">
-    <h1>{{appname}}</h1>
 
-    <h5>Name:</h5>
-    <p>{{name}}</p>
-
-    <h5>Class:</h5>
-    <p>{{class}}</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">List of Inventory Items</h4>
+            </div>
+            <div class="card-body">
+                <div class="toolbar">
+                </div>
+                <div class="material-datatables">
+                    <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0"
+                        width="100%" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Date Added</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in datas %}
+                            <tr>
+                                <td>{{data.name}}</td>
+                                <td>
+                                    <a href="/increment/{{data.id}}">
+                                        <button type="button" rel="tooltip" class="btn btn-primary btn-just-icon btn-sm">
+                                            <i class="material-icons">add</i>
+                                        </button>
+                                    </a>
+                                    {{data.amount}}
+                                    <a href="/decrement/{{data.id}}">
+                                        <button type="button" rel="tooltip" class="btn btn-primary btn-just-icon btn-sm"
+                                        onclick="return confirm('If the amount less than 1, the data will be deleted!');">
+                                            <i class="material-icons">remove</i>
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>{{data.price}}</td>
+                                <td>{{data.category}}</td>
+                                <td>{{data.description}}</td>
+                                <td>{{data.date_added}}</td>
+                                <td>
+                                    <a href="/edit/{{data.id}}">
+                                        <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm"
+                                            onclick="return confirm('Are you sure you want to edit this item?');">
+                                            <i class="material-icons">create</i>
+                                        </button>
+                                    </a>
+                                    
+                                    <a href="/delete/{{data.id}}">
+                                        <button type="button" rel="tooltip" class="btn btn-danger btn-just-icon btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this item?');">
+                                            <i class="material-icons">close</i>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <br />
+                    <p>You have saved {{ dataCounts }} items in this application</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<table id="myTable" class="display">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Date Added</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% comment %} Below is how to show the product data {% endcomment %}
-        {% for data in datas %}
-        <tr>
-            <td>{{data.name}}</td>
-            <td>{{data.amount}}</td>
-            <td>{{data.price}}</td>
-            <td>{{data.category}}</td>
-            <td>{{data.description}}</td>
-            <td>{{data.date_added}}</td>
-            <td>
-                <a href="/delete/{{data.id}}">
-                    <button type="button" class="btn btn-danger btn-sm btn-space" onclick="return confirm('Are you sure you want to delete this item?');">
-                        Delete
-                    </button>
-                </a>
-                
-                <a href="/increment/{{data.id}}">
-                    <button type="button" class="btn btn-primary btn-sm btn-space">
-                        Increment
-                    </button>
-                </a>
-                
-                <a href="/decrement/{{data.id}}">
-                    <button type="button" class="btn btn-warning btn-sm" onclick="return confirm('If the amount less than 1, the data will be deleted!');">
-                        Decrement
-                    </button>
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<p>Last login session: {{ last_login }}</p>
-
-<br />
-
-<br />
-<p>You have saved {{ dataCounts }} items in this application</p>
-<a href="{% url 'main:create_product' %}">
-    <button type="button" class="btn btn-primary">
-        Add New Product
-    </button>
-</a>
-
-
-<a href="{% url 'main:logout' %}">
-    <button type="button" class="btn btn-danger">
-        Logout
-    </button>
-</a>
-
 {% endblock content %}
+
+{% block javascripts %}
+
+<script>
+    $(document).ready(function () {
+        $('#datatables').DataTable({
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search records",
+            }
+        });
+
+        var table = $('#datatable').DataTable();
+
+        // Edit record
+        table.on('click', '.edit', function () {
+            $tr = $(this).closest('tr');
+            var data = table.row($tr).data();
+            alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+        });
+
+        // Delete a record
+        table.on('click', '.remove', function (e) {
+            $tr = $(this).closest('tr');
+            table.row($tr).remove().draw();
+            e.preventDefault();
+        });
+
+        //Like record
+        table.on('click', '.like', function () {
+            alert('You clicked on Like button');
+        });
+    });
+</script>
+
+{% endblock javascripts %}

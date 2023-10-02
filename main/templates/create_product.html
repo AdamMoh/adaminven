@@ -1,19 +1,70 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
 {% block content %}
-<h1>Add New Product</h1>
 
 <form method="POST">
     {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Add Item"/>
-            </td>
-        </tr>
-    </table>
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header card-header-rose card-header-text">
+                <div class="card-text">
+                    <h4 class="card-title">Add New Item</h4>
+                </div>
+            </div>
+            <div class="card-body ">
+                <form method="get" action="/" class="form-horizontal">
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label">Item Name</label>
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <input type="text" name="name" class="form-control" placeholder="Item Name">
+                                <span class="bmd-help">Name of the item</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label">Amount</label>
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <input type="number" name="amount" class="form-control" placeholder="Amount">
+                                <span class="bmd-help">Amount of the item</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label">Price</label>
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <input type="number" name="price" class="form-control" placeholder="Price">
+                                <span class="bmd-help">Price of the item</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label">Category</label>
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <input type="text" name="category" class="form-control" placeholder="Item Category">
+                                <span class="bmd-help">Category of the item</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label">Description</label>
+                        <div class="col-sm-10">
+                            <div class="form-group">
+                                <input type="text" name="description" class="form-control" placeholder="Description">
+                                <span class="bmd-help">Description of the item</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer ml-auto mr-auto">
+                <button type="submit" class="btn btn-rose" value="add item">Add</button>
+              </div>
+        </div>
+    </div>
 </form>
 
 {% endblock %}
