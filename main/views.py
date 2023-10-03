@@ -155,6 +155,6 @@ def edit_item(request, id):
         form.save()
         return HttpResponseRedirect(reverse('main:show_main'))
     
-    context = {'form': form}
+    context = {'form': form, 'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),}
     return render(request, "edit.html", context)
     
