@@ -134,5 +134,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SESSION_COOKIE_AGE = 60 # session will be removed after 60 seconds of inactivity and must be login again
+SESSION_COOKIE_AGE = 600 # session will be removed after 60 seconds of inactivity and must be login again
 SESSION_SAVE_EVERY_REQUESTS = True
