@@ -108,7 +108,7 @@ def login_user(request):
             return response
         else:
             msg = messages.info(request, 'Sorry, incorrect username or password. Please try again.')
-    context = {"form": form, "message": msg}
+    context = {"form": form, "msg": msg}
     return render(request, 'login.html', context)
 
 def logout_user(request):

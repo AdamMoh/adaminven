@@ -548,3 +548,660 @@ def show_main(request):
 ```
 to make the main page required login, i put the annotation before the methods to tell this method can be called after the login session has been created.
 </details>
+
+### Assignment 5
+<details>
+<summary>1. Explain the purpose of some CSS element selector and when to use it</summary>
+
+CSS (Cascading Style Sheets) element selectors are used to target and apply styles to specific HTML elements on a web page. They play a crucial role in web design and are essential for controlling the visual presentation of a website. Here are some common CSS element selectors and their purposes:
+
+#### 1. Type Selector:
+- Purpose: The type selector targets HTML elements based on their tag names.
+- When to use it: Use this selector when you want to apply a style to all instances of a particular HTML element on a page. For example, if you want to style all `<p>` elements with a specific font size or color, you would use the type selector.
+
+#### 2. Class Selector:
+- Purpose: The class selector selects elements with a specific class attribute value.
+- When to use it: Use this selector when you want to style a group of HTML elements that share a common class. Class selectors are versatile and allow you to apply styles to specific elements without affecting others.
+
+#### 3. Attribute Selector:
+- Purpose: The attribute selector selects elements based on the presence or value of attributes.
+- When to use it: Use this selector when you want to target elements with specific attributes. It's helpful for styling elements like links with certain attributes.
+
+</details>
+
+<details>
+<summary>2. Explain some of the HTML5 tags that you know</summary>
+
+HTML5 introduced several new elements that enhance the structure and semantics of web documents. These tags are designed to make it easier to describe the content on a web page accurately. Here are explanations of some of the key HTML5 tags:
+
+#### 1. `<header>`:
+- Purpose: The <header> element represents the introductory content or a container for a set of navigational links, a logo, or other header content for a section or the whole page.
+- Usage: Typically, you would use the <header> tag at the top of a web page to include elements like the site's logo, site title, and navigation menu.
+
+#### 2. `<nav>`:
+- Purpose: The <nav> element is used to define a section of navigation links that provide links to other pages or parts of the same page.
+- Usage: Wrap your navigation menu or any other navigation links in the `<nav>` tag to indicate that it's a navigation section.
+
+#### 3. `<footer>`:
+- Purpose: The <footer> element represents the footer of a section or the entire page. It typically contains information about the author, copyright, contact details, or links to related documents.
+- Usage: Place the footer content at the bottom of a section or the page using the `<footer>` tag.
+
+</details>
+
+<details>
+<summary>3. What are the differences between margin and padding</summary>
+
+Margin and padding are two fundamental CSS properties used to control the spacing and layout of elements on a web page. They serve different purposes and are applied to elements in distinct ways. Here are the key differences between margin and padding:
+
+#### 1. Purpose:
+- **Margin**: Margins are used to control the space outside the border of an element. They create space between the element and its neighboring elements.
+- **Padding**: Padding is used to control the space between the content of an element and its border. It defines the inner space within an element.
+
+#### 2. Typical Use Cases:
+- **Margin**: Margins are commonly used for creating space between elements, centering elements horizontally or vertically, and creating gutters between columns in a layout.
+
+- **Padding**: Padding is often used for controlling the spacing within elements, creating space around text or images, and defining the inner spacing of buttons and form elements.
+
+#### 3. Syntax:
+- **Margin**:Margin properties are usually specified using `margin-top`, `margin-right`, `margin-bottom`, and `margin-left`. You can also use the shorthand margin property to set all margins at once.
+
+- **Padding**: Padding properties are specified using `padding-top`, `padding-right`, `padding-bottom`, and `padding-left`. The shorthand `padding` property can be used to set all paddings simultaneously.
+
+In summary, margin and padding are essential for controlling the layout and spacing of elements in web design. Understanding their differences and how they interact with the CSS box model is crucial for creating well-designed and responsive web layouts.
+
+</details>
+
+<details>
+<summary>4. What are the differences between the CSS framework Tailwind and Bootstrap? When should we use Bootstrap rather than Tailwind, and vice versa?</summary>
+Tailwind CSS and Bootstrap are both popular CSS frameworks that streamline web development by providing pre-designed components and utility classes. However, they have different philosophies and approaches to building websites. Here are the key differences between Tailwind CSS and Bootstrap, along with some guidance on when to use one over the other:
+
+#### 1. Philosophy and Approach:
+- **Tailwind CSS**: Tailwind follows a utility-first approach. It provides a set of utility classes that you can apply directly to HTML elements to style them. These classes are highly customizable, and you compose your styles by combining these classes. Tailwind promotes a more granular and custom styling approach.
+
+- **Bootstrap**: Bootstrap takes a more component-oriented approach. It provides a collection of pre-designed components like navigation bars, cards, modals, etc., that you can use by including their HTML structure and applying Bootstrap's CSS classes. Bootstrap encourages a more opinionated and consistent design.
+
+#### 2. Customization:
+- **Tailwind CSS**: Tailwind is highly customizable. You can configure its utility classes to match your project's design system, and it offers a theming system that allows you to define your own color palette, typography, and more.
+
+- **Bootstrap**: Bootstrap provides a set of default styles and components with a distinct look and feel. Customizing Bootstrap to match your brand or design requirements may require more effort than Tailwind, as you may need to override existing styles or write additional CSS.
+
+When to Use Bootstrap:
+- Use Bootstrap when you want a consistent and opinionated design system out of the box.
+- Bootstrap is a good choice if you prefer a more component-oriented approach and want to quickly prototype or build a project with a consistent look and feel.
+- It's suitable for projects where you don't need extensive customization or have time constraints.
+
+When to Use Tailwind CSS:
+- Use Tailwind CSS when you need high customization and want to tailor the styles to match your unique design requirements.
+- Tailwind is a good fit for projects where you want to maintain full control over the design while still benefiting from a utility-based CSS approach.
+- It's suitable for projects that require a unique and custom design system.
+
+</details>
+
+<details>
+<summary>5. Explain how you implemented the checklist above step-by-step</summary>
+
+#### 1. Download css files and save to app static folder
+
+#### 2. Modify Templates
+##### 1. base.html
+```
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/png" href="/main/static/assets/img/favicon.png"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>
+    Inventory Website
+  </title>
+  
+  <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+  <!-- CSS Files -->
+  <link href="/main/static/assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
+  <!-- CSS Just for demo purpose, don't include it in your project -->
+  <link href="/main/static/assets/demo/demo.css" rel="stylesheet" />
+
+  <!-- Specific Page CSS goes HERE  -->  
+  {% block stylesheets %}
+  
+  {% endblock stylesheets %}
+
+</head>
+
+<body class="">
+  <div class="{% block body_class %}{% endblock body_class %}">
+
+    {% include 'sidebar.html' %}
+
+    <div class="main-panel">
+
+      {% include 'navigation.html' %}  
+
+      <!-- End Navbar -->
+      <div class="content">
+        <div class="content">
+          <div class="container-fluid">
+
+            {% block content %}{% endblock content %}
+
+          </div>
+        </div>
+      </div>
+
+      {% include 'footer.html' %}
+
+    </div>
+  </div>
+
+  {% include 'scripts.html' %}
+
+  {% include 'scripts-sidebar.html' %}
+
+  {% block javascripts %}{% endblock javascripts %}
+
+</body>
+</html>
+
+```
+
+###### 2. base-auth.html
+```
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="/main/static/assets/img/favicon.png"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        Inventory Website
+    </title>
+
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+    <link rel="stylesheet" type="text/css"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <link href="/static/assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
+
+    {% block stylesheets %}{% endblock stylesheets %}
+
+</head>
+
+<body class="off-canvas-sidebar">
+
+    <!-- Navbar -->
+    {% include 'navigation-auth.html' %}
+
+    <!-- End Navbar -->
+    <div class="wrapper wrapper-full-page">
+
+        {% block content %}{% endblock content %}
+
+    </div>
+
+    {% include 'scripts-auth.html' %}
+
+    {% include 'scripts-sidebar.html' %}
+    {% block javascripts %}{% endblock javascripts %}
+
+</body>
+
+</html>
+```
+
+##### 3. navigation.html
+```
+<nav class="navbar navbar-expand-lg position-sticky navbar-transparent navbar-absolute fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-wrapper">
+            <div class="navbar-minimize">
+                <button id="minimizeSidebar" class="btn btn-just-icon btn-white btn-fab btn-round">
+                    <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>
+                    <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>
+                </button>
+            </div>
+            <a class="navbar-brand" href="javascript:;">Inventory</a>
+        </div>
+        <div class="collapse navbar-collapse justify-content-center">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <div>
+                        <p>Welcome, {{ request.user.username }}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="flex flex-col text-right">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <div>
+                        <p>Last login: {{ last_login }}</p>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <i class="material-icons">person</i>
+                        <p class="d-lg-none d-md-block">
+                            Account
+                        </p>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+                        <a class="dropdown-item" href="{% url 'main:logout' %}">Log out</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+```
+
+##### 4. footer.html
+```
+<footer class="footer">
+    <div class="container-fluid">
+      <nav class="float-left">
+        <ul>
+          <li>
+            <a target="_blank" rel="noopener noreferrer"
+               href="http://localhost:8000">
+              Assignments PBP
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+```
+
+##### 5. sidebar.html
+```
+<div class="sidebar" data-color="rose" data-background-color="black" data-image="/main/static/assets/img/sidebar-1.jpg">
+
+    <div class="logo">
+        <a rel="noopener noreferrer"
+            href="{% url 'main:show_main' %}" class="simple-text logo-mini">
+            INV
+        </a>
+        <a rel="noopener noreferrer"
+            href="{% url 'main:show_main' %}" class="simple-text logo-normal">
+            Inventory
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+        <div class="user">
+            <div class="user-info">
+                <a data-toggle="collapse" href="#collapseExample" class="username">
+                    <span>
+                        {{ request.user.username }}
+                        <b class="caret"></b>
+                    </span>
+                </a>
+                <div class="collapse" id="collapseExample">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'main:logout' %}">
+                                <span class="sidebar-mini"> LO </span>
+                                <span class="sidebar-normal"> Logout </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <ul class="nav">
+            <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+                <a class="nav-link" href="{% url 'main:create_product' %}">
+                    <i class="material-icons">add</i>
+                    <p> Add Items </p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+```
+
+##### 6. login.html
+```
+{% extends "base-auth.html" %}
+
+{% block title %} Login {% endblock title %}
+
+{% block content %}
+
+<div class="page-header login-page header-filter" filter-color="black"
+    style="background-image: url('/main/static/assets/img/login.jpg'); background-size: cover; background-position: top center;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
+
+                <form role="form" method="post" action="">
+
+                    {% csrf_token %}
+
+                    <div class="card card-login card-hidden">
+                        <div class="card-header card-header-rose text-center">
+                            <h4 class="card-title">
+                                Login Inventory
+                            </h4>
+                        </div>
+                        <div class="card-body ">
+                            <p class="card-description text-center">
+
+                                {% if msg %}
+                                {{ msg | safe }}
+                                {% else %}
+                                <span>
+                                    Add your credentials
+                                </span>
+                                {% endif %}
+
+                            </p>
+
+                            <span class="bmd-form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="material-icons">face</i>
+                                        </span>
+                                    </div>
+                                    {{ form.username }}
+                                </div>
+                            </span>
+
+                            <span class="bmd-form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="material-icons">lock_outline</i>
+                                        </span>
+                                    </div>
+                                    {{ form.password }}
+                                </div>
+                            </span>
+
+
+                        </div>
+                        <div class="card-footer justify-content-center">
+                            <button type="submit" name="login" class="btn btn-primary my-4">Login</button>
+                        </div>
+
+                        <br />
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+<script>
+    $(document).ready(function () {
+        md.checkFullPageBackgroundImage();
+        setTimeout(function () {
+            $('.card').removeClass('card-hidden');
+        }, 700);
+    });
+</script>
+
+{% endblock javascripts %}
+```
+
+##### 6. register.html
+```
+{% extends "base-auth.html" %}
+
+{% block title %} Register {% endblock title %}
+
+{% block content %}
+
+<div class="page-header register-page header-filter" filter-color="black"
+    style="background-image: url('/main/static/assets/img/register.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7 ml-auto mr-auto">
+                <div class="card card-signup">
+                    <h2 class="card-title text-center">
+                        Register
+                    </h2>
+                    <div class="card-body card-hidden">
+                        <div class="row">
+                            <div class="col-md-5 ml-auto">
+                                <div class="info info-horizontal">
+                                </div>
+                            </div>
+                            <div class="col-md-10 mr-auto">
+                                <div class="col-md-10 mr-auto">
+                                    <h4 class="mt-3">
+
+                                        {% if msg %}
+                                        {{ msg | safe }}
+                                        {% else %}
+                                        Add your credentials
+                                        {% endif %}
+
+                                    </h4>
+                                </div>
+
+                                <form role="form" method="post" action="">
+
+                                    {% csrf_token %}
+
+                                    <div class="form-group has-default">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="material-icons">face</i>
+                                                </span>
+                                            </div>
+                                            {{ form.username }}
+                                        </div>
+                                    </div>
+                                    <span class="text-error">{{ form.username.errors }}</span>
+
+                                    <div class="form-group has-default">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="material-icons">lock_outline</i>
+                                                </span>
+                                            </div>
+                                            {{ form.password1 }}
+                                        </div>
+                                    </div>
+                                    <span class="text-error">{{ form.password1.errors }}</span>
+
+                                    <div class="form-group has-default">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="material-icons">lock_outline</i>
+                                                </span>
+                                            </div>
+                                            {{ form.password2 }}
+                                        </div>
+                                    </div>
+                                    <span class="text-error">{{ form.password2.errors }}</span>
+
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer ml-auto mr-auto">
+                        <button type="submit" name="submit" value="register"
+                            class="btn btn-primary btn-round mt-4">Register</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+<script>
+    $(document).ready(function () {
+        md.checkFullPageBackgroundImage();
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        md.checkFullPageBackgroundImage();
+        setTimeout(function () {
+            $('.card').removeClass('card-hidden');
+        }, 700);
+    });
+</script>
+
+{% endblock javascripts %}
+```
+
+##### 7. main.html
+```
+{% extends "base.html" %}
+
+{% block title %} Datatables {% endblock title %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">List of Inventory Items</h4>
+            </div>
+            <div class="card-body">
+                <div class="toolbar">
+                </div>
+                <div class="material-datatables">
+                    <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0"
+                        width="100%" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Date Added</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in datas %}
+                            <tr>
+                                <td>{{data.name}}</td>
+                                <td>
+                                    <a href="/increment/{{data.id}}">
+                                        <button type="button" rel="tooltip" class="btn btn-primary btn-just-icon btn-sm">
+                                            <i class="material-icons">add</i>
+                                        </button>
+                                    </a>
+                                    {{data.amount}}
+                                    <a href="/decrement/{{data.id}}">
+                                        <button type="button" rel="tooltip" class="btn btn-primary btn-just-icon btn-sm"
+                                        onclick="return confirm('If the amount less than 1, the data will be deleted!');">
+                                            <i class="material-icons">remove</i>
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>{{data.price}}</td>
+                                <td>{{data.category}}</td>
+                                <td>{{data.description}}</td>
+                                <td>{{data.date_added}}</td>
+                                <td>
+                                    <a href="/edit/{{data.id}}">
+                                        <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm"
+                                            onclick="return confirm('Are you sure you want to edit this item?');">
+                                            <i class="material-icons">create</i>
+                                        </button>
+                                    </a>
+                                    
+                                    <a href="/delete/{{data.id}}">
+                                        <button type="button" rel="tooltip" class="btn btn-danger btn-just-icon btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this item?');">
+                                            <i class="material-icons">close</i>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <br />
+                    <p>You have saved {{ dataCounts }} items in this application</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block javascripts %}
+
+<script>
+    $(document).ready(function () {
+        $('#datatables').DataTable({
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search records",
+            }
+        });
+
+        var table = $('#datatable').DataTable();
+
+        // Edit record
+        table.on('click', '.edit', function () {
+            $tr = $(this).closest('tr');
+            var data = table.row($tr).data();
+            alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+        });
+
+        // Delete a record
+        table.on('click', '.remove', function (e) {
+            $tr = $(this).closest('tr');
+            table.row($tr).remove().draw();
+            e.preventDefault();
+        });
+
+        //Like record
+        table.on('click', '.like', function () {
+            alert('You clicked on Like button');
+        });
+    });
+</script>
+
+{% endblock javascripts %}
+```
+
+</details>

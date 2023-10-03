@@ -13,7 +13,7 @@
                     <h2 class="card-title text-center">
                         Register
                     </h2>
-                    <div class="card-body">
+                    <div class="card-body card-hidden">
                         <div class="row">
                             <div class="col-md-5 ml-auto">
                                 <div class="info info-horizontal">
@@ -97,6 +97,15 @@
 <script>
     $(document).ready(function () {
         md.checkFullPageBackgroundImage();
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        md.checkFullPageBackgroundImage();
+        setTimeout(function () {
+            $('.card').removeClass('card-hidden');
+        }, 700);
     });
 </script>
 
