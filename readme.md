@@ -1205,3 +1205,310 @@ When to Use Tailwind CSS:
 ```
 
 </details>
+
+### Assignment 6
+<details>
+<summary>1. Explain the difference between asynchronous programming and synchronous programming.</summary>
+
+Asynchronous programming and synchronous programming are two different approaches to handling tasks and managing the flow of a program's execution. The key difference between them lies in how they handle operations that may take varying amounts of time to complete:
+
+1. Synchronous Programming:
+
+- In synchronous programming, tasks are executed one after the other in a sequential and blocking manner.
+- When a task is initiated, the program waits for it to complete before moving on to the next task. This can lead to long delays if a task takes a significant amount of time.
+- Synchronous programming is straightforward to understand and reason about, as the order of execution is       predictable.
+
+2. Asynchronous Programming:
+- In asynchronous programming, tasks can be initiated without waiting for their completion. This allows the program to continue executing other tasks while waiting for slow I/O operations or other asynchronous tasks to finish.
+- synchronous code often uses constructs like callbacks, promises, or async/await to handle the control flow, making it non-blocking.
+- Asynchronous programming is commonly used in scenarios where you want to improve the program's responsiveness and utilize system resources more efficiently, such as in web servers, user interfaces, or network communications.
+
+</details>
+
+<details>
+<summary>2. In the implementation of JavaScript and AJAX, there is an implemented paradigm called the event-driven programming paradigm. Explain what this paradigm means and give one example of its implementation in this assignment.</summary>
+
+Event-driven programming is a programming paradigm where the flow of a program is determined by events that occur asynchronously, such as user interactions, input from external sources, or system notifications. In event-driven programming, you define event handlers or callbacks that respond to these events when they happen. This paradigm is widely used in JavaScript and AJAX (Asynchronous JavaScript and XML) to create interactive and responsive web applications.
+
+In the context of JavaScript and AJAX, here's an example of how event-driven programming works:
+
+Suppose i have a simple web page with a button element, and i want to perform an action when the button is clicked. I can use event-driven programming to achieve this by attaching an event handler to the button's click event.
+
+</details>
+
+<details>
+<summary>3. Explain the implementation of asynchronous programming in AJAX</summary>
+
+```
+// Step 1: Create an XMLHttpRequest object
+var xhr = new XMLHttpRequest();
+
+// Step 2: Define an event handler (callback function) to handle the response
+xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 300) {
+        // Request was successful
+        var responseData = xhr.responseText;
+        console.log('Response Data:', responseData);
+    } else {
+        // Request failed
+        console.error('Request failed with status:', xhr.status);
+    }
+};
+
+// Step 3: Configure the request
+xhr.open('GET', 'https://jsonplaceholder.typicode.com/posts/1', true);
+// The third parameter 'true' indicates asynchronous mode
+
+// Step 4: Send the request
+xhr.send();
+
+// Rest of the code can continue executing without waiting for the response
+console.log('Request sent, waiting for response...');
+
+```
+
+</details>
+
+<details>
+<summary>4. In this semester, the implementation of AJAX is done using the Fetch API rather than the jQuery The Fetch API and jQuery are both used for making AJAX (Asynchronous JavaScript and XML) requests, but they have different features, advantages, and use cases can use event-driven programming to achieve this by attaching an event handler to the button's click event.</summary>
+
+**Fetch API:**
+1. **Modern JavaScript:** The Fetch API is a part of modern JavaScript, making it a native feature of web browsers. It's considered a more modern and standardized approach.
+
+2. **Promises:** Fetch returns Promises, which allows for more streamlined and readable asynchronous code using async/await. This is especially beneficial for handling complex sequences of asynchronous operations.
+
+3. **JSON by Default:** Fetch automatically parses JSON responses, making it convenient for handling REST APIs.
+
+
+**jQuery:**
+1. **Cross-browser Compatibility:** jQuery is designed to abstract away many of the cross-browser compatibility issues that developers used to face. It's well-tested and works consistently across different browsers.
+
+2. **DOM Manipulation:** jQuery is not just for AJAX. It's a comprehensive library that includes features for DOM manipulation, animations, event handling, and more. If you need these features, jQuery provides a one-stop solution.
+
+3. **Plugin Ecosystem:** jQuery has a rich ecosystem of plugins and extensions, making it easy to add additional functionality to your web application.
+</details>
+
+<details>
+<summary>5. Explain how you implemented the checklist above step-by-step (not just following the tutorial).</summary>
+
+1. modifying the `main.html` 
+```
+{% extends "base.html" %}
+
+{% block title %} Datatables {% endblock title %}
+
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">List of Inventory Items</h4>
+                <!-- <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
+                    data-target="#addDataModal">
+                    Add Item
+                </button> -->
+            </div>
+            <div class="card-body">
+                <div class="toolbar">
+                </div>
+                <div class="material-datatables">
+                    <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0"
+                        width="100%" style="width:100%">
+                    </table>
+                    <br />
+                    <p id="totalItem"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addDataModal" tabindex="-1" role="dialog" aria-labelledby="addDataModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalAddItem">Add New Product</h1>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form" onsubmit="return false;">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="col-form-label">Amount:</label>
+                        <input type="number" class="form-control" id="amount" name="amount"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="col-form-label">Price:</label>
+                        <input type="number" class="form-control" id="price" name="price"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="col-form-label">Category:</label>
+                        <input type="text" class="form-control" id="category" name="category"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="col-form-label">Description:</label>
+                        <textarea class="form-control" id="description" name="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnAdd" data-dismiss="modal">Add
+                    Product</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block javascripts %}
+
+<script>
+    async function getProducts() {
+        return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+    }
+
+    async function refreshProducts() {
+        document.getElementById("datatables").innerHTML = ""
+        const products = await getProducts()
+        let htmlString = `<thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Date Added</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>`
+        products.forEach((item) => {
+            htmlString += `\n
+        
+        <tbody>
+                            <tr>
+                                <td>${item.fields.name}</td>
+                                <td>
+                                    <a href="/increment/${item.pk}">
+                                        <button type="button" rel="tooltip" class="btn btn-primary btn-just-icon btn-sm">
+                                            <i class="material-icons">add</i>
+                                        </button>
+                                    </a>
+                                    ${item.fields.amount}
+                                    <a href="/decrement/${item.pk}">
+                                        <button type="button" rel="tooltip" class="btn btn-primary btn-just-icon btn-sm"
+                                        onclick="return confirm('If the amount less than 1, the data will be deleted!');">
+                                            <i class="material-icons">remove</i>
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>${item.fields.price}</td>
+                                <td>${item.fields.category}</td>
+                                <td>${item.fields.description}</td>
+                                <td>${item.fields.date_added}</td>
+                                <td>
+                                    <a href="/edit/${item.pk}">
+                                        <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm"
+                                            onclick="return confirm('Are you sure you want to edit this item?');">
+                                            <i class="material-icons">create</i>
+                                        </button>
+                                    </a>
+                                    
+                                    <a href="/delete/${item.pk}">
+                                        <button type="button" rel="tooltip" id="deleteBtn" class="btn btn-danger btn-just-icon btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this item?');">
+                                            <i class="material-icons">close</i>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>`
+        })
+
+        document.getElementById("datatables").innerHTML = htmlString
+        document.getElementById("totalItem").innerHTML = `You have saved ${products.length} items in this application`
+    }
+
+    refreshProducts()
+
+    // let delete_button = document.getElementById("deleteBtn")
+    //     for (var i = 0; i < delete_button.length; i++) {
+    //         delete_button[i].addEventListener('click', () => {
+    //             deleteProduct(event.currentTarget)
+    //         })
+    //     }
+
+    function addProduct() {
+        fetch("{% url 'main:add_product_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    function deleteProduct(button) {
+        fetch("{% url 'main:delete_item_ajax' %}", {
+            method: "POST",
+            body: new FormData(button.closest('form'))
+        }).then(fetchProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+    document.getElementById("btnAdd").onclick = addProduct
+    document.getElementById("deleteBtn").onclick = addProduct
+</script>
+
+
+{% endblock javascripts %}
+```
+
+2. add new function in `views.py`
+```
+@csrf_exempt
+def add_product_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        amount = request.POST.get("amount")
+        price = request.POST.get("price")
+        category = request.POST.get("category")
+        description = request.POST.get("description")
+        user = request.user
+
+        new_product = Item(name=name, amount=amount, category=category,price=price, description=description, user=user)
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+
+@login_required(login_url='/login')
+def delete_item_ajax(request, id):
+    try:
+        data = Item.objects.get(id=id)
+        data.delete()
+        return HttpResponse(b"OK", status=201)
+    except Item.DoesNotExist:
+        return HttpResponse(status=204)
+```
+
+3. add a new url in `urls.py`
+
+```
+path('create-product-ajax/', add_product_ajax, name='add_product_ajax'),
+path('delete/ajax/', delete_item_ajax, name='delete_item_ajax'),
+```
+</details>
