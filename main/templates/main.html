@@ -11,6 +11,10 @@
         <div class="card">
             <div class="card-header card-header-primary card-header-icon">
                 <h4 class="card-title">List of Inventory Items</h4>
+                <!-- <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
+                    data-target="#addDataModal">
+                    Add Item
+                </button> -->
             </div>
             <div class="card-body">
                 <div class="toolbar">
@@ -18,65 +22,58 @@
                 <div class="material-datatables">
                     <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0"
                         width="100%" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Amount</th>
-                                <th>Price</th>
-                                <th>Category</th>
-                                <th>Description</th>
-                                <th>Date Added</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for data in datas %}
-                            <tr>
-                                <td>{{data.name}}</td>
-                                <td>
-                                    <a href="/increment/{{data.id}}">
-                                        <button type="button" rel="tooltip" class="btn btn-primary btn-just-icon btn-sm">
-                                            <i class="material-icons">add</i>
-                                        </button>
-                                    </a>
-                                    {{data.amount}}
-                                    <a href="/decrement/{{data.id}}">
-                                        <button type="button" rel="tooltip" class="btn btn-primary btn-just-icon btn-sm"
-                                        onclick="return confirm('If the amount less than 1, the data will be deleted!');">
-                                            <i class="material-icons">remove</i>
-                                        </button>
-                                    </a>
-                                </td>
-                                <td>{{data.price}}</td>
-                                <td>{{data.category}}</td>
-                                <td>{{data.description}}</td>
-                                <td>{{data.date_added}}</td>
-                                <td>
-                                    <a href="/edit/{{data.id}}">
-                                        <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm"
-                                            onclick="return confirm('Are you sure you want to edit this item?');">
-                                            <i class="material-icons">create</i>
-                                        </button>
-                                    </a>
-                                    
-                                    <a href="/delete/{{data.id}}">
-                                        <button type="button" rel="tooltip" class="btn btn-danger btn-just-icon btn-sm"
-                                            onclick="return confirm('Are you sure you want to delete this item?');">
-                                            <i class="material-icons">close</i>
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
                     </table>
                     <br />
-                    <p>You have saved {{ dataCounts }} items in this application</p>
+                    <p id="totalItem"></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="addDataModal" tabindex="-1" role="dialog" aria-labelledby="addDataModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalAddItem">Add New Product</h1>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form" onsubmit="return false;">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="amount" class="col-form-label">Amount:</label>
+                        <input type="number" class="form-control" id="amount" name="amount"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="col-form-label">Price:</label>
+                        <input type="number" class="form-control" id="price" name="price"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="col-form-label">Category:</label>
+                        <input type="text" class="form-control" id="category" name="category"></input>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="col-form-label">Description:</label>
+                        <textarea class="form-control" id="description" name="description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnAdd" data-dismiss="modal">Add
+                    Product</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock content %}
 
@@ -119,5 +116,104 @@
         });
     });
 </script>
+
+<script>
+    async function getProducts() {
+        return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+    }
+
+    async function refreshProducts() {
+        document.getElementById("datatables").innerHTML = ""
+        const products = await getProducts()
+        let htmlString = `<thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Date Added</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>`
+        products.forEach((item) => {
+            htmlString += `\n
+        
+        <tbody>
+                            <tr>
+                                <td>${item.fields.name}</td>
+                                <td>
+                                    <a href="/increment/${item.pk}">
+                                        <button type="button" rel="tooltip" class="btn btn-primary btn-just-icon btn-sm">
+                                            <i class="material-icons">add</i>
+                                        </button>
+                                    </a>
+                                    ${item.fields.amount}
+                                    <a href="/decrement/${item.pk}">
+                                        <button type="button" rel="tooltip" class="btn btn-primary btn-just-icon btn-sm"
+                                        onclick="return confirm('If the amount less than 1, the data will be deleted!');">
+                                            <i class="material-icons">remove</i>
+                                        </button>
+                                    </a>
+                                </td>
+                                <td>${item.fields.price}</td>
+                                <td>${item.fields.category}</td>
+                                <td>${item.fields.description}</td>
+                                <td>${item.fields.date_added}</td>
+                                <td>
+                                    <a href="/edit/${item.pk}">
+                                        <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm"
+                                            onclick="return confirm('Are you sure you want to edit this item?');">
+                                            <i class="material-icons">create</i>
+                                        </button>
+                                    </a>
+                                    
+                                    <a href="/delete/${item.pk}">
+                                        <button type="button" rel="tooltip" id="deleteBtn" class="btn btn-danger btn-just-icon btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this item?');">
+                                            <i class="material-icons">close</i>
+                                        </button>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>`
+        })
+
+        document.getElementById("datatables").innerHTML = htmlString
+        document.getElementById("totalItem").innerHTML = `You have saved ${products.length} items in this application`
+    }
+
+    refreshProducts()
+
+    // let delete_button = document.getElementById("deleteBtn")
+    //     for (var i = 0; i < delete_button.length; i++) {
+    //         delete_button[i].addEventListener('click', () => {
+    //             deleteProduct(event.currentTarget)
+    //         })
+    //     }
+
+    function addProduct() {
+        fetch("{% url 'main:add_product_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    function deleteProduct(button) {
+        fetch("{% url 'main:delete_item_ajax' %}", {
+            method: "POST",
+            body: new FormData(button.closest('form'))
+        }).then(fetchProducts)
+
+        document.getElementById("form").reset()
+        return false
+    }
+    document.getElementById("btnAdd").onclick = addProduct
+    document.getElementById("deleteBtn").onclick = deleteProduct
+</script>
+
 
 {% endblock javascripts %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from main.models import Item
 from main.forms import ItemForm, LoginForm, SignUpForm
 from django.http import HttpResponse
@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 
 @login_required(login_url='/login')
@@ -125,6 +126,15 @@ def delete_item(request, id):
         return HttpResponseRedirect(reverse('main:show_main'))
     except Item.DoesNotExist:
         return HttpResponse(status=204)
+    
+@login_required(login_url='/login')
+def delete_item_ajax(request, id):
+    try:
+        data = Item.objects.get(id=id)
+        data.delete()
+        return HttpResponse(b"OK", status=201)
+    except Item.DoesNotExist:
+        return HttpResponse(status=204)
 
 @login_required(login_url='/login')
 def increment_item(request, id):
@@ -158,3 +168,24 @@ def edit_item(request, id):
     context = {'form': form, 'last_login': datetime.datetime.strptime(request.COOKIES['last_login'], '%Y-%m-%d %H:%M:%S.%f'),}
     return render(request, "edit.html", context)
     
+
+def get_product_json(request):
+    product_item = Item.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', product_item))
+
+@csrf_exempt
+def add_product_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        amount = request.POST.get("amount")
+        price = request.POST.get("price")
+        category = request.POST.get("category")
+        description = request.POST.get("description")
+        user = request.user
+
+        new_product = Item(name=name, amount=amount, category=category,price=price, description=description, user=user)
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()

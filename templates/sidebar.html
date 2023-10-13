@@ -1,12 +1,10 @@
 <div class="sidebar" data-color="rose" data-background-color="black" data-image="/main/static/assets/img/sidebar-1.jpg">
 
     <div class="logo">
-        <a rel="noopener noreferrer"
-            href="{% url 'main:show_main' %}" class="simple-text logo-mini">
+        <a rel="noopener noreferrer" href="{% url 'main:show_main' %}" class="simple-text logo-mini">
             INV
         </a>
-        <a rel="noopener noreferrer"
-            href="{% url 'main:show_main' %}" class="simple-text logo-normal">
+        <a rel="noopener noreferrer" href="{% url 'main:show_main' %}" class="simple-text logo-normal">
             Inventory
         </a>
     </div>
@@ -36,6 +34,14 @@
                 <a class="nav-link" href="{% url 'main:create_product' %}">
                     <i class="material-icons">add</i>
                     <p> Add Items </p>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav">
+            <li class="nav-item {% if 'index' in segment %} active {% endif %}">
+                <a type="button" class="nav-link" data-toggle="modal" data-target="#addDataModal">
+                    <i class="material-icons">add</i>
+                    <p> Add Items Using AJAX </p>
                 </a>
             </li>
         </ul>
