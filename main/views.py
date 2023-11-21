@@ -1,5 +1,6 @@
+import json
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseNotFound,JsonResponse
 from main.models import Item
 from main.forms import ItemForm, LoginForm, SignUpForm
 from django.http import HttpResponse
@@ -54,7 +55,6 @@ def show_xml(request):
     data = Item.objects.all()
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
-@login_required(login_url='/login')
 def show_json(request):
     data = Item.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
@@ -189,3 +189,24 @@ def add_product_ajax(request):
         return HttpResponse(b"CREATED", status=201)
 
     return HttpResponseNotFound()
+
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_product = Item.objects.create(
+            user = request.user,
+            name = data["name"],
+            amount = int(data["amount"]),
+            price = int(data["price"]),
+            category = data["category"],
+            description = data["description"]
+        )
+
+        new_product.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
